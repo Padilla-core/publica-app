@@ -64,6 +64,8 @@ export class InstagramStandaloneProvider
     codeVerifier: string;
     refresh: string;
   }) {
+    try {
+      
     const formData = new FormData();
     formData.append('client_id', process.env.INSTAGRAM_APP_ID!);
     formData.append('client_secret', process.env.INSTAGRAM_APP_SECRET!);
@@ -117,6 +119,13 @@ export class InstagramStandaloneProvider
       picture: profile_picture_url,
       username,
     };
+
+
+  } catch (error) {
+    console.log(error, JSON.stringify(error))
+
+    throw error
+  }
   }
 
   async post(

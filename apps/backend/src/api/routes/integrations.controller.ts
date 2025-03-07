@@ -393,6 +393,8 @@ export class IntegrationsController {
     @Param('integration') integration: string,
     @Body() body: ConnectIntegrationDto
   ) {
+    console.log('connecting....')
+    
     if (
       !this._integrationManager
         .getAllowedSocialsIntegrations()
@@ -440,6 +442,8 @@ export class IntegrationsController {
       additionalSettings,
       // eslint-disable-next-line no-async-promise-executor
     } = await new Promise<AuthTokenDetails>(async (res) => {
+
+
       const auth = await integrationProvider.authenticate(
         {
           code: body.code,
@@ -448,6 +452,8 @@ export class IntegrationsController {
         },
         details ? JSON.parse(details) : undefined
       );
+
+      console.log(auth, "edison")
 
       if (typeof auth === 'string') {
         return res({
@@ -469,6 +475,9 @@ export class IntegrationsController {
         );
         return res(newAuth);
       }
+
+
+      console.log(auth, "edison 2")
 
       return res(auth);
     });
@@ -495,6 +504,33 @@ export class IntegrationsController {
         validName = `Channel_${String(id).slice(0, 8)}`;
       }
     }
+
+    console.log(
+
+      additionalSettings,
+      !!integrationProvider.oneTimeToken,
+      org.id,
+      validName.trim(),
+      picture,
+      'social',
+      String(id),
+      integration,
+      accessToken,
+      refreshToken,
+      expiresIn,
+      username,
+      refresh ? false : integrationProvider.isBetweenSteps,
+      body.refresh,
+      +body.timezone,
+      details
+        ? AuthService.fixedEncryption(details)
+        : integrationProvider.customFields
+        ? AuthService.fixedEncryption(
+            Buffer.from(body.code, 'base64').toString()
+          )
+        : undefined
+    
+    )
     return this._integrationService.createOrUpdateIntegration(
       additionalSettings,
       !!integrationProvider.oneTimeToken,

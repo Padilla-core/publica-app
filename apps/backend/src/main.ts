@@ -10,6 +10,36 @@ import { SubscriptionExceptionFilter } from '@gitroom/backend/services/auth/perm
 import { HttpExceptionFilter } from '@gitroom/nestjs-libraries/services/exception.filter';
 import { ConfigurationChecker } from '@gitroom/helpers/configuration/configuration.checker';
 
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+import { Response } from 'express';
+
+@Catch()
+class GlobalExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(GlobalExceptionFilter.name);
+
+  catch(exception: unknown, host: ArgumentsHost): void {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+
+    let status = 500;
+    let message = 'Internal server error';
+
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      message = exception.getResponse() as string;
+    }
+
+    this.logger.error(`Unhandled Exception: ${JSON.stringify(exception)}`);
+
+    response.status(status).json({
+      statusCode: status,
+      message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+}
+
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     rawBody: true,
@@ -37,7 +67,8 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalFilters(new SubscriptionExceptionFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
-
+  app.useGlobalFilters(new GlobalExceptionFilter())
+  
   loadSwagger(app);
 
   const port = process.env.PORT || 3000;
