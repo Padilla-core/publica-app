@@ -26,6 +26,9 @@ import { InstagramStandaloneProvider } from '@gitroom/nestjs-libraries/integrati
 import { FarcasterProvider } from '@gitroom/nestjs-libraries/integrations/social/farcaster.provider';
 import { TelegramProvider } from '@gitroom/nestjs-libraries/integrations/social/telegram.provider';
 import { NostrProvider } from '@gitroom/nestjs-libraries/integrations/social/nostr.provider';
+import { MarketplaceProvider } from '@gitroom/nestjs-libraries/integrations/marketplace/marketplace.integrations.interface';
+import { CorotosProvider } from '@gitroom/nestjs-libraries/integrations/marketplace/corotos.provider';
+import { PulgaVirtualProvider } from '@gitroom/nestjs-libraries/integrations/marketplace/pulga-virtual.provider';
 
 const socialIntegrationList: SocialProvider[] = [
   new XProvider(),
@@ -57,6 +60,11 @@ const articleIntegrationList = [
   new MediumProvider(),
 ];
 
+const marketplaceIntegrationList: MarketplaceProvider[] = [
+  new CorotosProvider(),
+  new PulgaVirtualProvider(),
+]
+
 @Injectable()
 export class IntegrationManager {
   async getAllIntegrations() {
@@ -75,6 +83,10 @@ export class IntegrationManager {
         name: p.name,
         identifier: p.identifier,
       })),
+      marketplace: marketplaceIntegrationList.map((p) => ({
+        name: p.name, 
+        identifier: p.identifier,
+      }))
     };
   }
 
@@ -118,5 +130,11 @@ export class IntegrationManager {
   }
   getArticlesIntegration(integration: string): ArticleProvider {
     return articleIntegrationList.find((i) => i.identifier === integration)!;
+  }
+  getAllowedMarketplacesIntegrations() {
+    return marketplaceIntegrationList.map((p) => p.identifier);
+  }
+  getMarketplaceIntegration(integration: string): MarketplaceProvider {
+    return marketplaceIntegrationList.find((i) => i.identifier === integration)!;
   }
 }

@@ -22,6 +22,7 @@ import { BullMqClient } from '@gitroom/nestjs-libraries/bull-mq-transport-new/cl
 import { difference, uniq } from 'lodash';
 import utc from 'dayjs/plugin/utc';
 import { AutopostRepository } from '@gitroom/nestjs-libraries/database/prisma/autopost/autopost.repository';
+import { MarketplaceProvider } from '@gitroom/nestjs-libraries/integrations/marketplace/marketplace.integrations.interface';
 
 dayjs.extend(utc);
 
@@ -78,7 +79,7 @@ export class IntegrationService {
     org: string,
     name: string,
     picture: string | undefined,
-    type: 'article' | 'social',
+    type: 'article' | 'social' | 'marketplace',
     internalId: string,
     provider: string,
     token: string,
@@ -623,5 +624,41 @@ export class IntegrationService {
         ];
       }, [] as number[])
     );
+  }
+
+  async authenticateMarketplaceIntegrarion(
+    orgId: string,
+    id: string, 
+    integrationProvider: MarketplaceProvider,
+    status: string,
+    internalId: string,
+    cookies: unknown[],
+    platformId?: string,
+  ) {
+    const getIntegration = await this.getIntegrationById(orgId, id)
+
+    if(!getIntegration) {
+      console.error(`authenticateMarketplaceIntegrarion: integration ${id} not found`)
+      return
+    }
+
+    if(getIntegration.type !== 'marketplace') {
+      console.error(`authenticateMarketplaceIntegrarion: invalid integrationType ${getIntegration.type}`)
+      return
+    }
+
+    if(integrationProvider.identifier !== getIntegration.providerIdentifier) {
+      console.error(`authenticateMarketplaceIntegrarion: invalid providerIdentified ${getIntegration.providerIdentifier}`)
+      return
+    }
+
+    return await this._integrationRepository.updateIntegration(id, {
+      internalId: internalId ?? getIntegration.internalId,
+      additionalSettings: JSON.stringify([{
+          cookies, 
+          status, 
+          platformId,
+      }])
+    })
   }
 }
