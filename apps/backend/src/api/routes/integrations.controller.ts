@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -29,7 +30,7 @@ import { NotEnoughScopesFilter } from '@gitroom/nestjs-libraries/integrations/in
 import { PostsService } from '@gitroom/nestjs-libraries/database/prisma/posts/posts.service';
 import { IntegrationTimeDto } from '@gitroom/nestjs-libraries/dtos/integrations/integration.time.dto';
 import { AuthService } from '@gitroom/helpers/auth/auth.service';
-import { AuthTokenDetails } from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
+import { AuthTokenDetails, SocialProvider } from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
 import { PlugDto } from '@gitroom/nestjs-libraries/dtos/plugs/plug.dto';
 import {
   NotEnoughScopes,
@@ -37,6 +38,7 @@ import {
 } from '@gitroom/nestjs-libraries/integrations/social.abstract';
 import { timer } from '@gitroom/helpers/utils/timer';
 import { TelegramProvider } from '@gitroom/nestjs-libraries/integrations/social/telegram.provider';
+import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
 
 @ApiTags('Integrations')
 @Controller('/integrations')
@@ -90,9 +92,12 @@ export class IntegrationsController {
         (await this._integrationService.getIntegrationsList(org.id)).map(
           async (p) => {
             const findIntegration =
-              this._integrationManager.getSocialIntegration(
-                p.providerIdentifier
-              );
+             (
+              this._integrationManager.getSocialIntegration(p.providerIdentifier)
+              || this._integrationManager.getMarketplaceIntegration(p.providerIdentifier)
+              || this._integrationManager.getArticlesIntegration(p.providerIdentifier)
+            ) as SocialProvider
+              
             return {
               name: p.name,
               id: p.id,
@@ -621,5 +626,42 @@ export class IntegrationsController {
   @Get('/telegram/updates')
   async getUpdates(@Query() query: { word: string; id?: number }) {
     return new TelegramProvider().getBotId(query);
+  }
+
+  @Post('/marketplace/:integration/connect')
+  async connectMarketplace(
+    @GetOrgFromRequest() org: Organization,
+    @Param('integration') integration: string,
+    @Body() body: { internalId?: string, username: string, password: string}
+  ){
+    if (
+      !this._integrationManager
+        .getAllowedMarketplacesIntegrations()
+        .includes(integration)
+    ) {
+      throw new BadRequestException('Integration not allowed');
+    }
+
+    const getIntegration = this._integrationManager.getMarketplaceIntegration(integration)
+
+    const newIntegration = await this._integrationService.createOrUpdateIntegration(
+      undefined,
+      true,
+      org.id,
+      body.username,
+      undefined,
+      'marketplace',
+      body.internalId ?? makeId(10),
+      integration,
+      '',
+      '',
+      undefined,
+      body.username,
+      false,
+    );
+
+    await getIntegration.authenticate(org.id, newIntegration.id, body.username, body.password)
+    
+    return newIntegration
   }
 }

@@ -119,7 +119,7 @@ export class IntegrationRepository {
     org: string,
     name: string,
     picture: string | undefined,
-    type: 'article' | 'social',
+    type: 'article' | 'social' | 'marketplace',
     internalId: string,
     provider: string,
     token: string,
