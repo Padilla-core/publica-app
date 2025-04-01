@@ -633,6 +633,7 @@ export class IntegrationService {
     status: string,
     internalId: string,
     cookies: unknown[],
+    password: string,
     platformId?: string,
   ) {
     const getIntegration = await this.getIntegrationById(orgId, id)
@@ -657,6 +658,7 @@ export class IntegrationService {
       additionalSettings: JSON.stringify([{
           cookies, 
           status, 
+          password,
           platformId,
       }])
     })
