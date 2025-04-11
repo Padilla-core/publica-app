@@ -3,7 +3,7 @@ import { PostsRepository } from '@gitroom/nestjs-libraries/database/prisma/posts
 import { CreatePostDto } from '@gitroom/nestjs-libraries/dtos/posts/create.post.dto';
 import dayjs from 'dayjs';
 import { IntegrationManager } from '@gitroom/nestjs-libraries/integrations/integration.manager';
-import { Integration, Post, Media, From } from '@prisma/client';
+import { Integration, Post, Media, From, State } from '@prisma/client';
 import { GetPostsDto } from '@gitroom/nestjs-libraries/dtos/posts/get.posts.dto';
 import { NotificationService } from '@gitroom/nestjs-libraries/database/prisma/notifications/notification.service';
 import { capitalize, shuffle, uniq } from 'lodash';
@@ -248,6 +248,11 @@ export class PostsService {
               firstPost,
               ...morePosts,
             ])
+          : firstPost.integration?.type === 'marketplace' 
+          ? await this.postMarketplace(firstPost.integration!, [
+            firstPost,
+            ...morePosts,
+          ])
           : await this.postSocial(firstPost.integration!, [
               firstPost,
               ...morePosts,
@@ -1007,5 +1012,114 @@ export class PostsService {
         : '[Postiz] Your latest notifications',
       message
     );
+  }
+
+  private async postMarketplace(integration: Integration, posts: Post[]) {
+    const getIntegration = this._integrationManager.getMarketplaceIntegration(
+      integration.providerIdentifier
+    );
+
+    const addicionalSettings = JSON.parse(integration.additionalSettings ?? "{}")
+    const [ post ] = posts
+
+    if(!getIntegration) {
+      return {}
+    }
+
+    if (addicionalSettings?.status !== 'authenticated') {
+      const providerIdentifier = capitalize(
+        integration.providerIdentifier
+      )
+
+      await this._notificationService.inAppNotification(
+        integration.organizationId,
+        `Could not publish your post on ${providerIdentifier}`,
+        `We couldn't publish your post on ${providerIdentifier}.\nYou need to reconnect your ${capitalize(
+          integration.profile!
+        )}(${providerIdentifier}) channel.`,
+        true,
+        true
+      );
+
+      return {
+        postId: post.id,
+        releaseURL: 'no-releaseURL-yet',
+      };
+    }
+
+    try {
+      await getIntegration.post(integration, post)
+
+      await this._notificationService.inAppNotification(
+        integration.organizationId,
+        `Your post is being published on ${capitalize(
+          integration.providerIdentifier
+        )}`,
+        `Your post is being published on ${capitalize(
+          integration.providerIdentifier
+        )} at ${getIntegration.postListUrl}`,
+        false,
+      );
+
+      return {
+        postId: post.id,
+        releaseURL: 'no-releaseURL-yet',
+      };
+    } catch (err) {
+      console.error(err)
+
+      throw err;
+    }
+  }
+
+  async receiveMarketplacePost (
+    orgId: string,
+    integrationId: string, 
+    postId: string, 
+    status: State,
+    releaseUrl: string,
+    error?: any,
+  ) {
+    const getIntegration = await this._integrationService.getIntegrationById(orgId, integrationId);
+    const post = await this._postRepository.getPostById(postId);
+
+    if(!getIntegration || !post) {
+      return;
+    }
+    
+    if(status === State.ERROR) {
+      const providerIdentifier = capitalize(getIntegration.providerIdentifier)
+
+      await this._postRepository.changeState(postId, status, error);
+      await this._notificationService.inAppNotification(
+        getIntegration.organizationId,
+        `Could not publish your post on ${providerIdentifier}`,
+        `We couldn't publish your post on ${providerIdentifier}.\nYou need to reconnect your ${capitalize(
+          getIntegration.profile!
+        )}(${providerIdentifier}) channel.`,
+        true,
+        true
+      );
+      return;
+    }
+    
+    if(status === State.PUBLISHED) {
+      await this._postRepository.updatePost(post.id,  releaseUrl, releaseUrl);
+      
+      await this._notificationService.inAppNotification(
+        getIntegration.organizationId,
+        `Your article has been published on ${capitalize(
+          getIntegration.providerIdentifier
+        )}`,
+        `Your article has been published at ${releaseUrl}`,
+        true,
+        true,
+      );
+
+      await this._webhookService.digestWebhooks(
+        getIntegration.organizationId,
+        dayjs(post.publishDate ?? dayjs()).format('YYYY-MM-DDTHH:mm:00')
+      );
+    }
   }
 }

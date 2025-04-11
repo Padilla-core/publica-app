@@ -31,6 +31,7 @@ import { Nowpayments } from '@gitroom/nestjs-libraries/crypto/nowpayments';
 import { WebhookController } from '@gitroom/backend/api/routes/webhooks.controller';
 import { SignatureController } from '@gitroom/backend/api/routes/signature.controller';
 import { AutopostController } from '@gitroom/backend/api/routes/autopost.controller';
+import { PublicaController } from './routes/publica.controller';
 
 const authenticatedController = [
   UsersController,
@@ -56,6 +57,7 @@ const authenticatedController = [
     StripeController,
     AuthController,
     PublicController,
+    PublicaController,
     ...authenticatedController,
   ],
   providers: [
