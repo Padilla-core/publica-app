@@ -69,13 +69,13 @@ export const useMenuItems = () => {
       role: ['ADMIN', 'SUPERADMIN'],
       hide: true,
     },
-    // {
-    //   name: t('affiliate', 'Affiliate'),
-    //   icon: 'affiliate',
-    //   path: 'https://affiliate.postiz.com',
-    //   role: ['ADMIN', 'SUPERADMIN', 'USER'],
-    //   requireBilling: true,
-    // },
+    {
+      name: t('affiliate', 'Affiliate'),
+      icon: 'affiliate',
+      path: 'https://publica.affonso.io/',
+      role: ['ADMIN', 'SUPERADMIN', 'USER'],
+      requireBilling: true,
+    },
   ];
 };
 export const TopMenu: FC = () => {
