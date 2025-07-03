@@ -17,6 +17,7 @@ import { FacebookComponent } from '@gitroom/frontend/components/layout/facebook.
 import { headers } from 'next/headers';
 import { headerName } from '@gitroom/react/translation/i18n.config';
 import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
+import { AffonsoScript } from '@gitroom/frontend/components/layout/affonso.script';
 
 const chakra = Chakra_Petch({
   weight: '400',
@@ -49,6 +50,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           oauthDisplayName={process.env.NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME!}
           uploadDirectory={process.env.NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY!}
           tolt={process.env.NEXT_PUBLIC_TOLT!}
+          affonso={process.env.NEXT_PUBLIC_AFFONSO!}
           facebookPixel={process.env.NEXT_PUBLIC_FACEBOOK_PIXEL!}
           telegramBotName={process.env.TELEGRAM_BOT_NAME!}
           neynarClientId={process.env.NEYNAR_CLIENT_ID!}
@@ -65,6 +67,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           }
         >
           <ToltScript />
+          <AffonsoScript />
           <FacebookComponent />
           <Plausible
             domain={!!process.env.IS_GENERAL ? 'publica.do' : 'gitroom.com'}

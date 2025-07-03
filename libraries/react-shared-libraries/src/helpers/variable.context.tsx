@@ -20,6 +20,7 @@ interface VariableContextInterface {
   disableImageCompression: boolean;
   language: string;
   tolt: string;
+  affonso: string;
   transloadit: string[];
 }
 const VariableContext = createContext({
@@ -41,6 +42,7 @@ const VariableContext = createContext({
   disableImageCompression: false,
   language: '',
   tolt: '',
+  affonso: '',
   transloadit: [],
 } as VariableContextInterface);
 export const VariableContextComponent: FC<

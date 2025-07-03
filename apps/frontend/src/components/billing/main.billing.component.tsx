@@ -28,6 +28,8 @@ import { useTrack } from '@gitroom/react/helpers/use.track';
 import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
 import { PurchaseCrypto } from '@gitroom/frontend/components/billing/purchase.crypto';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { useAffonso } from '../layout/affonso.script';
+
 export interface Tiers {
   month: Array<{
     name: 'Pro' | 'Standard';
@@ -218,6 +220,7 @@ export const MainBillingComponent: FC<{
   const router = useRouter();
   const utm = useUtmUrl();
   const tolt = useTolt();
+  const affonso = useAffonso();
   const track = useTrack();
   const t = useT();
 
@@ -333,6 +336,7 @@ export const MainBillingComponent: FC<{
             utm,
             billing,
             tolt: tolt(),
+            affonso: affonso().affonso,
           }),
         })
       ).json();

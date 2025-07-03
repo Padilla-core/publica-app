@@ -393,6 +393,13 @@ export class StripeService {
             },
           }
         : {}),
+      ...(body.affonso
+        ? {
+            metadata: {
+              affonso_referral: body.affonso,
+            },
+          }
+        : {}),
       allow_promotion_codes: true,
       line_items: [
         {
