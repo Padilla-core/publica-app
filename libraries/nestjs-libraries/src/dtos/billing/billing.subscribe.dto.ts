@@ -10,4 +10,5 @@ export class BillingSubscribeDto {
   utm: string;
 
   tolt: string;
+  affonso: string;
 }

@@ -23,6 +23,7 @@ import { FarcasterProvider } from '@gitroom/frontend/components/auth/providers/f
 import dynamic from 'next/dynamic';
 import { WalletUiProvider } from '@gitroom/frontend/components/auth/providers/placeholder/wallet.ui.provider';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { useAffonso } from '../layout/affonso.script';
 const WalletProvider = dynamic(
   () => import('@gitroom/frontend/components/auth/providers/wallet.provider'),
   {
@@ -89,6 +90,8 @@ export function RegisterAfter({
   provider: string;
 }) {
   const t = useT();
+
+  const affonso = useAffonso()
   const { isGeneral, genericOauth, neynarClientId, billingEnabled } =
     useVariables();
   const [loading, setLoading] = useState(false);
@@ -121,6 +124,7 @@ export function RegisterAfter({
         setLoading(false);
         if (response.status === 200) {
           fireEvents('register');
+          affonso().register(data.email)
           return track(TrackEnum.CompleteRegistration).then(() => {
             if (response.headers.get('activate') === 'true') {
               router.push('/auth/activate');

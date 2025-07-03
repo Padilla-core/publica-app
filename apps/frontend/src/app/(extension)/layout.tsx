@@ -38,6 +38,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           oauthDisplayName={process.env.NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME!}
           uploadDirectory={process.env.NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY!}
           tolt={process.env.NEXT_PUBLIC_TOLT!}
+          affonso={process.env.NEXT_PUBLIC_AFFONSO!}
           facebookPixel={process.env.NEXT_PUBLIC_FACEBOOK_PIXEL!}
           telegramBotName={process.env.TELEGRAM_BOT_NAME!}
           neynarClientId={process.env.NEYNAR_CLIENT_ID!}
