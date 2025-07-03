@@ -136,9 +136,9 @@ export const SettingsPopup: FC<{
                   {t('signatures', 'Signatures')}
                 </Tabs.Tab>
               )}
-              {!!user?.tier?.public_api && isGeneral && showLogout && (
+              {/* {!!user?.tier?.public_api && isGeneral && showLogout && (
                 <Tabs.Tab value="api">{t('public_api', 'Public API')}</Tabs.Tab>
-              )}
+              )} */}
 
               {user?.tier.current !== 'FREE' && (
                 <Tabs.Tab value="whatsapp">{t('whatsapp', 'Whatsapp')}</Tabs.Tab>
@@ -174,11 +174,11 @@ export const SettingsPopup: FC<{
                 <SignaturesComponent />
               </Tabs.Panel>
             )}
-            {!!user?.tier?.public_api && isGeneral && showLogout && (
+            {/* {!!user?.tier?.public_api && isGeneral && showLogout && (
               <Tabs.Panel value="api" pt="md">
                 <PublicComponent />
               </Tabs.Panel>
-            )}
+            )} */}
 
             {user?.tier.current !== 'FREE' && (
               <Tabs.Panel value="whatsapp" pt="md">
