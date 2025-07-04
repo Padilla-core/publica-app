@@ -11,6 +11,126 @@ import dayjs from 'dayjs';
 import { SocialAbstract } from '@gitroom/nestjs-libraries/integrations/social.abstract';
 import { InstagramDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/instagram.dto';
 import { Integration } from '@prisma/client';
+import ffmpeg from 'fluent-ffmpeg';
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
+import axios from 'axios';
+import { basename, extname } from 'path';
+import { UploadFactory } from '@gitroom/nestjs-libraries/upload/upload.factory';
+import { tmpdir } from 'os';
+import { writeFile, unlink, readFile } from 'fs/promises';
+import { join } from 'path';
+
+ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+
+function getIGFileNameFromUrl(url: string): string {
+  const base = basename(url);
+  const ext = extname(base);
+  const name = base.replace(ext, '');
+  return `${name}-ig-publica-xxxxy${ext}`;
+}
+
+export async function urlExists(url: string): Promise<boolean> {
+  try {
+    await axios.head(url);
+    return true;
+  } catch (err: any) {
+    if (err.response && err.response.status === 404) return false;
+    return false;
+  }
+}
+
+async function convertirYSubirVideoIGBuffer(originalUrl: string, mimetype: string): Promise<string> {
+  // 1. Construir la URL esperada del archivo -ig
+  const igFileName = getIGFileNameFromUrl(originalUrl);
+  const igUrl = originalUrl.replace(basename(originalUrl), igFileName);
+
+  console.log('[IG-VIDEO] URL original:', originalUrl);
+  console.log('[IG-VIDEO] URL IG esperada:', igUrl);
+
+  // 2. Validar si ya existe
+  if (await urlExists(igUrl)) {
+    console.log('[IG-VIDEO] Ya existe versión IG, usando:', igUrl);
+    return igUrl;
+  }
+
+  // 3. Descargar el video original como buffer
+  const response = await axios.get(originalUrl, { responseType: 'arraybuffer' });
+  console.log('[IG-VIDEO] Status descarga:', response.status);
+  console.log('[IG-VIDEO] Content-Type:', response.headers['content-type']);
+
+  if (response.status !== 200) {
+    throw new Error(`[IG-VIDEO] No se pudo descargar el video: status ${response.status}`);
+  }
+  if (!response.headers['content-type'] || !response.headers['content-type'].startsWith('video/')) {
+    throw new Error(`[IG-VIDEO] El archivo no es un video: content-type ${response.headers['content-type']}`);
+  }
+
+  // 4. Escribir el buffer a un archivo temporal
+  const tempInputPath = join(tmpdir(), `${makeId(10)}-input.mp4`);
+  const tempOutputPath = join(tmpdir(), `${makeId(10)}-output.mp4`);
+  await writeFile(tempInputPath, Buffer.from(response.data));
+
+  // 5. Convertir usando ffmpeg (archivo input, archivo output)
+  await new Promise((resolve, reject) => {
+    ffmpeg(tempInputPath)
+      .outputOptions([
+        '-vf',
+        'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920',
+        '-c:v',
+        'libx264',
+        '-profile:v',
+        'high',
+        '-level',
+        '4.0',
+        '-pix_fmt',
+        'yuv420p',
+        '-r',
+        '30',
+        '-crf', '18',
+        '-c:a',
+        'aac',
+        '-b:a',
+        '128k',
+        '-ar',
+        '44100',
+        '-movflags',
+        '+faststart'
+      ])
+      .format('mp4')
+      .on('end', resolve)
+      .on('error', (err) => {
+        console.error('[IG-VIDEO] Error en ffmpeg:', err);
+        reject(err);
+      })
+      .save(tempOutputPath);
+  });
+
+  // 6. Leer el archivo convertido a buffer
+  const buffer = await readFile(tempOutputPath);
+
+  // 7. Subir el buffer usando UploadFactory con el nombre correcto
+  const storage = UploadFactory.createStorage();
+  const file: Express.Multer.File = {
+    fieldname: 'file',
+    originalname: igFileName,
+    encoding: '7bit',
+    mimetype: mimetype || 'video/mp4',
+    size: buffer.length,
+    buffer,
+    stream: undefined,
+    destination: '',
+    filename: igFileName,
+    path: '',
+  };
+  const uploaded = await storage.uploadFile(file);
+
+  // 8. Borrar archivos temporales
+  await unlink(tempInputPath).catch(() => {});
+  await unlink(tempOutputPath).catch(() => {});
+
+  // 9. Retornar la URL/path del archivo subido
+  return uploaded.path;
+}
 
 export class InstagramProvider
   extends SocialAbstract
@@ -211,6 +331,16 @@ export class InstagramProvider
     type = 'graph.facebook.com'
   ): Promise<PostResponse[]> {
     const [firstPost, ...theRest] = postDetails;
+
+    // Convertir y reemplazar path de videos a versión -ig
+    if (firstPost.media && Array.isArray(firstPost.media)) {
+      for (const media of firstPost.media) {
+        if (media.path.indexOf('.mp4') > -1 && !media.path.includes('-ig-publica-xxxxy.mp4')) {
+          media.path = await convertirYSubirVideoIGBuffer(media.path, 'video/mp4');
+        }
+      }
+    }
+
     console.log('in progress');
     const isStory = firstPost.settings.post_type === 'story';
     const medias = await Promise.all(
