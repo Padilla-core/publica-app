@@ -347,10 +347,10 @@ export class InstagramProvider
               ? firstPost?.media?.length === 1
                 ? isStory
                   ? `video_url=${m.path}&media_type=STORIES`
-                  : `video_url=${m.path}&media_type=REELS`
+                  : `video_url=${m.path}&media_type=REELS&thumb_offset=${m?.thumbnailTimestamp || 0}`
                 : isStory
                   ? `video_url=${m.path}&media_type=STORIES`
-                  : `video_url=${m.path}&media_type=VIDEO`
+                  : `video_url=${m.path}&media_type=VIDEO&thumb_offset=${m?.thumbnailTimestamp || 0}`
               : isStory
                 ? `image_url=${m.path}&media_type=STORIES`
                 : `image_url=${m.path}`;
@@ -381,7 +381,7 @@ export class InstagramProvider
                 `https://${type}/v20.0/${photoId}?access_token=${accessToken}&fields=status_code`
               )
             ).json();
-            await timer(3000);
+            await timer(10000);
             status = status_code;
           }
           console.log('in progress3');
