@@ -111,6 +111,7 @@ ${provider.customer ? `👥 Cliente:
       date: obj.date,
       type: obj.type,
       tags: [],
+      shortLink: false,
       posts: [
         {
           group: makeId(10),
@@ -129,7 +130,9 @@ ${provider.customer ? `👥 Cliente:
             }))
           ),
           // @ts-ignore
-          settings: obj.settings || {},
+          settings: obj.settings || {
+            __type: 'any' as any,
+          },
           integration: {
             id: obj.providerId,
           },
