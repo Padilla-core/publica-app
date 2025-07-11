@@ -1,18 +1,20 @@
 import { timer } from '@gitroom/helpers/utils/timer';
-import pThrottle from 'p-throttle';
+import { concurrencyService } from '@gitroom/helpers/utils/concurrency.service';
 
 export class RefreshToken {
   constructor(
     public identifier: string,
     public json: string,
-    public body: BodyInit
+    public body: BodyInit,
+    public message = ''
   ) {}
 }
 export class BadBody {
   constructor(
     public identifier: string,
     public json: string,
-    public body: BodyInit
+    public body: BodyInit,
+    public message = ''
   ) {}
 }
 
@@ -20,15 +22,30 @@ export class NotEnoughScopes {
   constructor(public message = 'Not enough scopes') {}
 }
 
-const pThrottleInstance = pThrottle({
-  limit: 1,
-  interval: 2000
-});
-
 export abstract class SocialAbstract {
-  private fetchInstance = pThrottleInstance(
-    (url: RequestInfo, options?: RequestInit) => fetch(url, options)
-  );
+  abstract identifier: string;
+
+  public handleErrors(
+    body: string
+  ): { type: 'refresh-token' | 'bad-body'; value: string } | undefined {
+    return undefined;
+  }
+
+  async runInConcurrent<T>(func: (...args: any[]) => Promise<T>) {
+    const value = await concurrencyService<any>(this.identifier.split('-')[0], async () => {
+      try {
+        return await func();
+      } catch (err) {
+        return {type: 'error', value: err};
+      }
+    });
+
+    if (value && value.type === 'error') {
+      throw value.value;
+    }
+
+    return value;
+  }
 
   async fetch(
     url: string,
@@ -36,13 +53,17 @@ export abstract class SocialAbstract {
     identifier = '',
     totalRetries = 0
   ): Promise<Response> {
-    const request = await this.fetchInstance(url, options);
+    const request = await concurrencyService(
+      this.identifier.split('-')[0],
+      () => fetch(url, options)
+    );
 
     if (request.status === 200 || request.status === 201) {
       return request;
     }
 
     if (totalRetries > 2) {
+      console.log('bad body retries');
       throw new BadBody(identifier, '{}', options.body || '{}');
     }
 
@@ -55,28 +76,32 @@ export abstract class SocialAbstract {
     }
 
     if (json.includes('rate_limit_exceeded') || json.includes('Rate limit')) {
-      await timer(2000);
+      await timer(5000);
+      console.log('rate limit trying again');
       return this.fetch(url, options, identifier, totalRetries + 1);
     }
+
+    const handleError = this.handleErrors(json || '{}');
 
     if (
-      request.status === 401 ||
-      (json.includes('OAuthException') &&
-        !json.includes('The user is not an Instagram Business') &&
-        !json.includes('Unsupported format') &&
-        !json.includes('2207018') &&
-        !json.includes('352') &&
-        !json.includes('REVOKED_ACCESS_TOKEN'))
+      request.status === 401 &&
+      (handleError?.type === 'refresh-token' || !handleError)
     ) {
-      throw new RefreshToken(identifier, json, options.body!);
+      console.log('refresh token', json);
+      throw new RefreshToken(
+        identifier,
+        json,
+        options.body!,
+        handleError?.value
+      );
     }
 
-    if (totalRetries < 2) {
-      await timer(2000);
-      return this.fetch(url, options, identifier, totalRetries + 1);
-    }
-
-    throw new BadBody(identifier, json, options.body!);
+    throw new BadBody(
+      identifier,
+      json,
+      options.body!,
+      handleError?.value || ''
+    );
   }
 
   checkScopes(required: string[], got: string | string[]) {

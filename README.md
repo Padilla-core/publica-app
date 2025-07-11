@@ -40,10 +40,10 @@
   <img alt="Pinterest" src="https://postiz.com/svgs/socials/Pinterest.svg" width="32">
   <img alt="Threads" src="https://postiz.com/svgs/socials/Threads.svg" width="32">
   <img alt="X" src="https://postiz.com/svgs/socials/X.svg" width="32">
-  <img alt="X" src="https://postiz.com/svgs/socials/Slack.svg" width="32">
-  <img alt="X" src="https://postiz.com/svgs/socials/Discord.svg" width="32">
-  <img alt="X" src="https://postiz.com/svgs/socials/Mastodon.svg" width="32">
-  <img alt="X" src="https://postiz.com/svgs/socials/Bluesky.svg" width="32">
+  <img alt="Slack" src="https://postiz.com/svgs/socials/Slack.svg" width="32">
+  <img alt="Discord" src="https://postiz.com/svgs/socials/Discord.svg" width="32">
+  <img alt="Mastodon" src="https://postiz.com/svgs/socials/Mastodon.svg" width="32">
+  <img alt="Bluesky" src="https://postiz.com/svgs/socials/Bluesky.svg" width="32">
 </div>
 
 <p align="center">
@@ -54,18 +54,23 @@
   <br />
   <a href="https://youtube.com/@postizofficial" rel="dofollow"><strong>Watch the YouTube Tutorials»</strong></a>
   <br />
+</p>
 
-  <br/>
-    <a href="https://platform.postiz.com">Register</a>
-    ·
-    <a href="https://discord.postiz.com">Join Our Discord (devs only)</a>
-    ·
-    <a href="https://twitter.com/getpostiz">X</a>
-    ·
-    <a href="https://gitroom.com">Gitroom</a>
-    ·
-    <a href="https://git.sn/telegram">Telegram (Crypto)</a>
-  </p>
+<p align="center">
+  <a href="https://platform.postiz.com">Register</a>
+  ·
+  <a href="https://discord.postiz.com">Join Our Discord (devs only)</a>
+  ·
+  <a href="https://docs.postiz.com/public-api">Public API</a><br />
+</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/@postiz/node">NodeJS SDK</a>
+  ·
+  <a href="https://www.npmjs.com/package/n8n-nodes-postiz">N8N custom node</a>
+  ·
+  <a href="https://apps.make.com/postiz">Make.com integration</a>
+</p>
+
 
 <br />
 

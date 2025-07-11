@@ -1,6 +1,10 @@
 import 'reflect-metadata';
 
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { XProvider } from '@gitroom/nestjs-libraries/integrations/social/x.provider';
 import { SocialProvider } from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
 import { LinkedinProvider } from '@gitroom/nestjs-libraries/integrations/social/linkedin.provider';
@@ -89,7 +93,7 @@ export class IntegrationManager {
           plugs: (
             Reflect.getMetadata('custom:plug', p.constructor.prototype) || []
           )
-            .filter((f) => !f.disabled)
+            .filter((f: any) => !f.disabled)
             .map((p: any) => ({
               ...p,
               fields: p.fields.map((c: any) => ({
@@ -111,7 +115,7 @@ export class IntegrationManager {
             'custom:internal_plug',
             p.constructor.prototype
           ) || []
-        ).filter((f) => !f.disabled) || [],
+        ).filter((f: any) => !f.disabled) || [],
     };
   }
 

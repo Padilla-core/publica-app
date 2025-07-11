@@ -163,11 +163,11 @@ export class IntegrationService {
     await this.informAboutRefreshError(orgId, integration);
   }
 
-  async informAboutRefreshError(orgId: string, integration: Integration) {
+  async informAboutRefreshError(orgId: string, integration: Integration, err = '') {
     await this._notificationService.inAppNotification(
       orgId,
-      `Could not refresh your ${integration.providerIdentifier} channel`,
-      `Could not refresh your ${integration.providerIdentifier} channel. Please go back to the system and connect it again ${process.env.FRONTEND_URL}/launches`,
+      `Could not refresh your ${integration.providerIdentifier} channel ${err}`,
+      `Could not refresh your ${integration.providerIdentifier} channel ${err}. Please go back to the system and connect it again ${process.env.FRONTEND_URL}/launches`,
       true
     );
   }
@@ -616,7 +616,7 @@ export class IntegrationService {
     this._workerServiceProducer.emit('plugs', {
       id: 'plug_' + data.postId + '_' + findPlug.identifier,
       options: {
-        delay: 0, // runPlug.runEveryMilliseconds,
+        delay: data.delay,
       },
       payload: {
         plugId: data.plugId,
