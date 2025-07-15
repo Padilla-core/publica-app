@@ -24,6 +24,7 @@ import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/s
 import { UploadFactory } from '@gitroom/nestjs-libraries/upload/upload.factory';
 import { SaveMediaInformationDto } from '@gitroom/nestjs-libraries/dtos/media/save.media.information.dto';
 import { VideoDto } from '@gitroom/nestjs-libraries/dtos/videos/video.dto';
+import { VideoFunctionDto } from '@gitroom/nestjs-libraries/dtos/videos/video.function.dto';
 
 @ApiTags('Media')
 @Controller('/media')
@@ -38,6 +39,16 @@ export class MediaController {
   deleteMedia(@GetOrgFromRequest() org: Organization, @Param('id') id: string) {
     return this._mediaService.deleteMedia(org.id, id);
   }
+
+  @Post('/generate-video')
+  generateVideo(
+    @GetOrgFromRequest() org: Organization,
+    @Body() body: VideoDto
+  ) {
+    console.log('hello');
+    return this._mediaService.generateVideo(org, body);
+  }
+
   @Post('/generate-image')
   async generateImage(
     @GetOrgFromRequest() org: Organization,
@@ -171,21 +182,18 @@ export class MediaController {
     return this._mediaService.getVideoOptions();
   }
 
-  @Post('/video/:identifier/:function')
+  @Post('/video/function')
   videoFunction(
-    @Param('identifier') identifier: string,
-    @Param('function') functionName: string,
-    @Body('params') body: any
+    @Body() body: VideoFunctionDto
   ) {
-    return this._mediaService.videoFunction(identifier, functionName, body);
+    return this._mediaService.videoFunction(body.identifier, body.functionName, body.params);
   }
 
-  @Post('/generate-video/:type')
-  generateVideo(
+  @Get('/generate-video/:type/allowed')
+  generateVideoAllowed(
     @GetOrgFromRequest() org: Organization,
-    @Body() body: VideoDto,
     @Param('type') type: string
   ) {
-    return this._mediaService.generateVideo(org, body, type);
+    return this._mediaService.generateVideoAllowed(org, type);
   }
 }

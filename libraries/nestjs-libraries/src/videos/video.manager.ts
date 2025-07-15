@@ -17,13 +17,19 @@ export class VideoManager {
         title: p.title,
         description: p.description,
         placement: p.placement,
+        trial: p.trial,
       })
     );
   }
 
+  checkAvailableVideoFunction(method: any) {
+    const videoFunction = Reflect.getMetadata('video-function', method);
+    return !videoFunction;
+  }
+
   getVideoByName(
     identifier: string
-  ): (VideoParams & { instance: VideoAbstract }) | undefined {
+  ): (VideoParams & { instance: VideoAbstract<any> }) | undefined {
     const video = (Reflect.getMetadata('video', VideoAbstract) || []).find(
       (p: any) => p.identifier === identifier
     );
