@@ -16,6 +16,7 @@ type UserWithExtras = User & {
   isLifetime?: boolean;
   impersonate: boolean;
   allowTrial: boolean;
+  isTrailing: boolean;
 };
 
 type UserContextType = UserWithExtras & {
