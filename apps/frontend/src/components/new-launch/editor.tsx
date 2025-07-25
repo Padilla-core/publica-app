@@ -539,7 +539,7 @@ export const Editor: FC<{
   const { getRootProps, isDragActive } = useDropzone({ onDrop });
 
   const valueWithoutHtml = useMemo(() => {
-    return stripHtmlValidation('normal', props.value || '', false, true);
+    return stripHtmlValidation('normal', props.value || '', true);
   }, [props.value]);
 
   const addText = useCallback(
@@ -569,8 +569,8 @@ export const Editor: FC<{
 
   return (
     <div>
-      <div className="relative bg-customColor2" id={id}>
-        <div className="flex gap-[5px] bg-customColor55 border-b border-t border-customColor3 justify-center items-center p-[5px]">
+      <div className="relative bg-bigStrip" id={id}>
+        <div className="flex gap-[5px] bg-newBgLineColor border-b border-t border-customColor3 justify-center items-center p-[5px]">
           <SignatureBox editor={editorRef?.current?.editor} />
           <UText
             editor={editorRef?.current?.editor}
@@ -664,7 +664,7 @@ export const Editor: FC<{
             </div>
             <div className="w-full h-[46px] pointer-events-none" />
             <div
-              className="flex bg-customColor2"
+              className="flex bg-newBgLineColor"
               onClick={() => {
                 if (editorRef?.current?.editor?.isFocused) {
                   return;
