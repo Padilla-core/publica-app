@@ -39,6 +39,7 @@ import { PublicaController } from '@gitroom/backend/api/routes/publica.controlle
 import { PhoneNumberController } from '@gitroom/backend/api/routes/phone.number.controller';
 import { SetsController } from '@gitroom/backend/api/routes/sets.controller';
 import { ThirdPartyController } from '@gitroom/backend/api/routes/third-party.controller';
+import { MonitorController } from '@gitroom/backend/api/routes/monitor.controller';
 
 const authenticatedController = [
   UsersController,
@@ -69,6 +70,7 @@ const authenticatedController = [
     PublicController,
     McpController,
     PublicaController,
+    MonitorController,
     ...authenticatedController,
   ],
   providers: [
