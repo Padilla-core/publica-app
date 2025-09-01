@@ -12,7 +12,7 @@ import {
 import { clsx } from 'clsx';
 import PhoneInputtt from 'react-phone-number-input'
 import { useFormContext, Controller } from 'react-hook-form';
-import interClass from '../helpers/inter.font';
+// import interClass from '../helpers/inter.font';
 
 
 export const PhoneInput: FC<
@@ -44,7 +44,7 @@ export const PhoneInput: FC<
 
   return (
     <div className="flex flex-col gap-[6px]">
-      {!!label && (<div className={`${interClass} text-[14px]`}>{label}</div>)}
+      {!!label && (<div className={clsx('text-[14px] w-full text-left')}>{label}</div>)}
 
       <div
         className={clsx(

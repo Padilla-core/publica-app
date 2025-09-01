@@ -10,7 +10,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { VerifyPhoneNumberDto } from '@gitroom/nestjs-libraries/dtos/settings/verify.phone.number.dto';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import interClass from '@gitroom/react/helpers/inter.font';
+// import interClass from '@gitroom/react/helpers/inter.font';
 import clsx from 'clsx';
 import { parsePhoneNumberWithError } from 'libphonenumber-js'
 import { Tooltip } from 'react-tooltip';
@@ -238,7 +238,7 @@ export const PhoneNumberComponent = () => {
               </div>
               <div className="flex-1 flex justify-end">
                 <Button
-                  className={`!bg-customColor3 !h-[24px] border border-customColor21 rounded-[4px] text-[12px] ${interClass}`}
+                  className={`!bg-customColor3 !h-[24px] border border-customColor21 rounded-[4px] text-[12px]`}
                   onClick={changePhoneNumber}
                   secondary={true}
                 >

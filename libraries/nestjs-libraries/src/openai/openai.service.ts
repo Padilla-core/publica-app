@@ -191,14 +191,18 @@ export class OpenaiService {
     const res = completion.choices[0];
   
     const toolCall = res.message.tool_calls?.[0];
+     // @ts-ignore
     if (toolCall?.function?.name && toolCall.function?.arguments) {
       try {
         return {
           type: 'tool_call',
+          // @ts-ignore
           toolName: toolCall.function.name,
+          // @ts-ignore
           arguments: JSON.parse(toolCall.function.arguments),
         };
       } catch (err) {
+        // @ts-ignore
         console.error('Error parsing tool arguments:', toolCall.function.arguments);
         return {
           type: 'text',
