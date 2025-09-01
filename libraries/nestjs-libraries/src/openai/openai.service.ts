@@ -36,7 +36,7 @@ export class OpenaiService {
   async generatePromptForPicture(prompt: string) {
     return (
       (
-        await openai.beta.chat.completions.parse({
+        await openai.chat.completions.parse({
           model: 'gpt-4.1',
           messages: [
             {
@@ -57,7 +57,7 @@ export class OpenaiService {
   async generateVoiceFromText(prompt: string) {
     return (
       (
-        await openai.beta.chat.completions.parse({
+        await openai.chat.completions.parse({
           model: 'gpt-4.1',
           messages: [
             {
@@ -191,14 +191,18 @@ export class OpenaiService {
     const res = completion.choices[0];
   
     const toolCall = res.message.tool_calls?.[0];
+     // @ts-ignore
     if (toolCall?.function?.name && toolCall.function?.arguments) {
       try {
         return {
           type: 'tool_call',
+          // @ts-ignore
           toolName: toolCall.function.name,
+          // @ts-ignore
           arguments: JSON.parse(toolCall.function.arguments),
         };
       } catch (err) {
+        // @ts-ignore
         console.error('Error parsing tool arguments:', toolCall.function.arguments);
         return {
           type: 'text',
@@ -224,7 +228,7 @@ export class OpenaiService {
 
     const posts =
       (
-        await openai.beta.chat.completions.parse({
+        await openai.chat.completions.parse({
           model: 'gpt-4.1',
           messages: [
             {
@@ -247,7 +251,7 @@ export class OpenaiService {
 
     return {
       posts: await Promise.all(
-        posts.map(async (post) => {
+        posts.map(async (post: any) => {
           if (post.length <= len) {
             return post;
           }
@@ -257,7 +261,7 @@ export class OpenaiService {
             try {
               return (
                 (
-                  await openai.beta.chat.completions.parse({
+                  await openai.chat.completions.parse({
                     model: 'gpt-4.1',
                     messages: [
                       {
@@ -291,7 +295,7 @@ export class OpenaiService {
     const message = `You are an assistant that takes a text and break it into slides, each slide should have an image prompt and voice text to be later used to generate a video and voice, image prompt should capture the essence of the slide and also have a back dark gradient on top, image prompt should not contain text in the picture, generate between 3-5 slides maximum`;
     return (
       (
-        await openai.beta.chat.completions.parse({
+        await openai.chat.completions.parse({
           model: 'gpt-4.1',
           messages: [
             {

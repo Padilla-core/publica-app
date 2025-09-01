@@ -15,8 +15,7 @@ import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions
 import { FAQComponent } from '@gitroom/frontend/components/billing/faq.component';
 import { useSWRConfig } from 'swr';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import interClass from '@gitroom/react/helpers/inter.font';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { useModals } from '@mantine/modals';
 import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
@@ -29,6 +28,8 @@ import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
 import { PurchaseCrypto } from '@gitroom/frontend/components/billing/purchase.crypto';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { FinishTrial } from '@gitroom/frontend/components/billing/finish.trial';
+import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
+
 import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
 import { useAffonso } from '../layout/affonso.script';
 
@@ -393,7 +394,7 @@ export const MainBillingComponent: FC<{
     [monthlyOrYearly, subscription, user, utm]
   );
   if (user?.isLifetime) {
-    router.replace('/billing/lifetime');
+    router.replace('/');
     return null;
   }
   return (
@@ -426,7 +427,7 @@ export const MainBillingComponent: FC<{
                     ? values.year_price
                     : values.month_price}
                 </div>
-                <div className={`text-[14px] ${interClass} text-customColor18`}>
+                <div className={`text-[14px] text-customColor18`}>
                   {monthlyOrYearly === 'on' ? '/year' : '/month'}
                 </div>
               </div>
@@ -521,8 +522,8 @@ export const MainBillingComponent: FC<{
           {t(
             'your_subscription_will_be_canceled_at',
             'Your subscription will be canceled at'
-          )}
-          {dayjs(subscription.cancelAt).local().format('D MMM, YYYY')}
+          )}{' '}
+          {newDayjs(subscription.cancelAt).local().format('D MMM, YYYY')}
           <br />
           {t(
             'you_will_never_be_charged_again',

@@ -7,7 +7,6 @@ import { ThirdPartyListComponent } from '@gitroom/frontend/components/third-part
 import React, { FC, useCallback, useState } from 'react';
 import useSWR from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import interClass from '@gitroom/react/helpers/inter.font';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import useCookie from 'react-use-cookie';
@@ -65,7 +64,7 @@ export const ThirdPartyMenuComponent: FC<{
       {show && (
         <div
           onClick={(e) => e.stopPropagation()}
-          className={`absolute top-[100%] start-0 p-[8px] px-[20px] bg-fifth flex flex-col gap-[16px] z-[100] rounded-[8px] border border-tableBorder ${interClass} text-nowrap`}
+          className={`absolute top-[100%] start-0 p-[8px] px-[20px] bg-fifth flex flex-col gap-[16px] z-[100] rounded-[8px] border border-tableBorder text-nowrap`}
         >
           <div
             className="flex gap-[12px] items-center"
@@ -103,7 +102,14 @@ export const ThirdPartyComponent = () => {
     return (await fetch('/third-party')).json();
   }, []);
 
-  const { data, isLoading, mutate } = useSWR('third-party', integrations);
+  const { data, isLoading, mutate } = useSWR('third-party', integrations, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateIfStale: false,
+    revalidateOnMount: true,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  });
   const [collapseMenu, setCollapseMenu] = useCookie('collapseMenu', '0');
 
   return (
@@ -142,7 +148,11 @@ export const ThirdPartyComponent = () => {
           </div>
           <div className="flex flex-col gap-[10px]">
             <div className="flex-1 flex flex-col gap-[14px]">
-              <div className={clsx('gap-[16px] flex flex-col relative justify-center group/profile hover:bg-boxHover rounded-e-[8px]')}>
+              <div
+                className={clsx(
+                  'gap-[16px] flex flex-col relative justify-center group/profile hover:bg-boxHover rounded-e-[8px]'
+                )}
+              >
                 {!isLoading && !data?.length ? (
                   <div>No Integrations Yet</div>
                 ) : (

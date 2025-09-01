@@ -11,7 +11,6 @@ import { CreateOrgUserDto } from '@gitroom/nestjs-libraries/dtos/auth/create.org
 import { GithubProvider } from '@gitroom/frontend/components/auth/providers/github.provider';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import interClass from '@gitroom/react/helpers/inter.font';
 import clsx from 'clsx';
 import { GoogleProvider } from '@gitroom/frontend/components/auth/providers/google.provider';
 import { OauthProvider } from '@gitroom/frontend/components/auth/providers/oauth.provider';
@@ -120,7 +119,7 @@ export function RegisterAfter({
         ...data,
       }),
     })
-      .then((response) => {
+      .then(async (response) => {
         setLoading(false);
         if (response.status === 200) {
           fireEvents('register');
@@ -134,7 +133,7 @@ export function RegisterAfter({
           });
         } else {
           form.setError('email', {
-            message: getHelpfulReasonForRegistrationFailure(response.status),
+            message: await response.text(),
           });
         }
       })
@@ -173,7 +172,7 @@ export function RegisterAfter({
           <div className="h-[20px] mb-[24px] mt-[24px] relative">
             <div className="absolute w-full h-[1px] bg-fifth top-[50%] -translate-y-[50%]" />
             <div
-              className={`absolute z-[1] ${interClass} justify-center items-center w-full start-0 top-0 flex`}
+              className={`absolute z-[1] justify-center items-center w-full start-0 top-0 flex`}
             >
               <div className="bg-customColor15 px-[16px]">{t('or', 'OR')}</div>
             </div>
@@ -205,7 +204,7 @@ export function RegisterAfter({
             placeholder="Company"
           />
         </div>
-        <div className={clsx('text-[12px]', interClass)}>
+        <div className={clsx('text-[12px]')}>
           {t(
             'by_registering_you_agree_to_our',
             'By registering you agree to our'

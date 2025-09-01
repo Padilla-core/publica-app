@@ -3,7 +3,7 @@
 import React, { FC, ReactNode, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import OtpInput from 'react-otp-input';
-import interClass from '../helpers/inter.font';
+// import interClass from '../helpers/inter.font';
 import clsx from 'clsx';
 
 export const CodeInput: FC<{
@@ -25,7 +25,7 @@ export const CodeInput: FC<{
   return (
     <div className="flex flex-col gap-[6px] w-full items-center">
       {!!label && (
-        <div className={clsx(interClass, 'text-[14px] w-full text-left')}>
+        <div className={clsx('text-[14px] w-full text-left')}>
           {label}
         </div>
       )}
