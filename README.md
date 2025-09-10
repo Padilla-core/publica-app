@@ -1,4 +1,3 @@
-
 <p align="center">
   <a href="https://github.com/growchief/growchief">
     <img alt="automate" src="https://github.com/user-attachments/assets/d760188d-8d56-4b05-a6c1-c57e67ef25cd" />
