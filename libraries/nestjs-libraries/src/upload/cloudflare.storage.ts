@@ -78,19 +78,20 @@ class CloudflareStorage implements IUploadProvider {
 
     return `${this._uploadUrl}/${id}.${extension}`;
   }
-  //Forze
-  async uploadFile(file: Express.Multer.File, contentType: string = undefined): Promise<any> {
-    const id = makeId(10);
-    const extension = mime.extension(file.mimetype) || '';
 
-    // Create the PutObjectCommand to upload the file to Cloudflare R2
-    const command = new PutObjectCommand({
-      Bucket: this._bucketName,
-      ACL: 'public-read',
-      Key: `${id}.${extension}`,
-      Body: file.buffer,
-      ContentType: contentType,
-    });
+  async uploadFile(file: Express.Multer.File, contentType: string = undefined): Promise<any> {
+    try {
+      const id = makeId(10);
+      const extension = mime.extension(file.mimetype) || '';
+
+      // Create the PutObjectCommand to upload the file to Cloudflare R2
+      const command = new PutObjectCommand({
+        Bucket: this._bucketName,
+        ACL: 'public-read',
+        Key: `${id}.${extension}`,
+        Body: file.buffer,
+        ContentType: contentType,
+      });
 
       await this._client.send(command);
 
