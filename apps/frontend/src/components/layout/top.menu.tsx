@@ -146,7 +146,7 @@ export const useMenuItem = () => {
     //         stroke="currentColor"
     //         strokeWidth="3"
     //       />
-
+    //
     //       <circle
     //         cx="24.9189"
     //         cy="14.2621"
@@ -286,7 +286,7 @@ export const TopMenu: FC = () => {
   const { isGeneral, billingEnabled } = useVariables();
   return (
     <>
-      <div className="flex flex-1 flex-col gap-[16px]">
+      <div className="flex flex-1 flex-col gap-[16px] blurMe">
         {
           // @ts-ignore
           user?.orgId &&
@@ -318,7 +318,7 @@ export const TopMenu: FC = () => {
               ))
         }
       </div>
-      <div className="flex flex-col gap-[16px]">
+      <div className="flex flex-col gap-[16px] blurMe">
         {secondMenu
           .filter((f) => {
             if (f.hide) {
