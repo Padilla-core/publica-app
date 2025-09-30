@@ -92,20 +92,24 @@ class CloudflareStorage implements IUploadProvider {
       ContentType: contentType,
     });
 
-    await this._client.send(command);
+      await this._client.send(command);
 
-    return {
-      filename: `${id}.${extension}`,
-      mimetype: file.mimetype,
-      size: file.size,
-      buffer: file.buffer,
-      originalname: `${id}.${extension}`,
-      fieldname: 'file',
-      path: `${this._uploadUrl}/${id}.${extension}`,
-      destination: `${this._uploadUrl}/${id}.${extension}`,
-      encoding: '7bit',
-      stream: file.buffer as any,
-    };
+      return {
+        filename: `${id}.${extension}`,
+        mimetype: file.mimetype,
+        size: file.size,
+        buffer: file.buffer,
+        originalname: `${id}.${extension}`,
+        fieldname: 'file',
+        path: `${this._uploadUrl}/${id}.${extension}`,
+        destination: `${this._uploadUrl}/${id}.${extension}`,
+        encoding: '7bit',
+        stream: file.buffer as any,
+      };
+    } catch (err) {
+      console.error('Error uploading file to Cloudflare R2:', err);
+      throw err;
+    }
   }
 
   // Implement the removeFile method from IUploadProvider
