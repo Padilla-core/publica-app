@@ -21,7 +21,7 @@ import { EmailService } from '@gitroom/nestjs-libraries/services/email.service';
 import { RealIP } from 'nestjs-real-ip';
 import { UserAgent } from '@gitroom/nestjs-libraries/user/user.agent';
 import { NewsletterDto } from '@gitroom/nestjs-libraries/dtos/auth/newsletter.dto';
-import { NewsletterService } from '@gitroom/nestjs-libraries/services/newsletter.service';
+import { NewsletterService } from '@gitroom/nestjs-libraries/newsletter/newsletter.service';
 import { Provider } from '@prisma/client';
 
 @ApiTags('Auth')
