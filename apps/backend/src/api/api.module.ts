@@ -34,7 +34,6 @@ import { AutopostController } from '@gitroom/backend/api/routes/autopost.control
 import { SetsController } from '@gitroom/backend/api/routes/sets.controller';
 import { ThirdPartyController } from '@gitroom/backend/api/routes/third-party.controller';
 import { MonitorController } from '@gitroom/backend/api/routes/monitor.controller';
-import { ApiController } from './api.controller';
 
 const authenticatedController = [
   UsersController,
@@ -63,7 +62,6 @@ const authenticatedController = [
     AuthController,
     PublicController,
     MonitorController,
-    ApiController,
     ...authenticatedController,
   ],
   providers: [
