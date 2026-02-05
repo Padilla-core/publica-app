@@ -216,7 +216,7 @@ export function RegisterAfter({
                 )}
                 &nbsp;
                 <a
-                  href={`https://postiz.com/terms`}
+                  href={`https://publica.do/terms`}
                   className="underline hover:font-bold"
                   rel="nofollow"
                 >
@@ -225,7 +225,7 @@ export function RegisterAfter({
                 &nbsp;
                 {t('and', 'and')}&nbsp;
                 <a
-                  href={`https://postiz.com/privacy`}
+                  href={`https://publica.do/privacy`}
                   rel="nofollow"
                   className="underline hover:font-bold"
                 >

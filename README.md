@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://postiz.com/" target="_blank">
+  <a href="https://publica.do/" target="_blank">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/765e9d72-3ee7-4a56-9d59-a2c9befe2311">
     <img alt="Postiz Logo" src="https://github.com/user-attachments/assets/f0d30d70-dddb-4142-8876-e9aa6ed1cb99" width="280"/>
@@ -16,32 +16,32 @@
 <div align="center">
   <strong>
   <h2>Your ultimate AI social media scheduling tool</h2><br />
-  <a href="https://postiz.com">Postiz</a>: An alternative to: Buffer.com, Hypefury, Twitter Hunter, etc...<br /><br />
+  <a href="https://publica.do">Postiz</a>: An alternative to: Buffer.com, Hypefury, Twitter Hunter, etc...<br /><br />
   </strong>
   Postiz offers everything you need to manage your social media posts,<br />build an audience, capture leads, and grow your business.
 </div>
 
 <div class="flex" align="center">
   <br />
-  <img alt="Instagram" src="https://postiz.com/svgs/socials/Instagram.svg" width="32">
-  <img alt="Youtube" src="https://postiz.com/svgs/socials/Youtube.svg" width="32">
-  <img alt="Dribbble" src="https://postiz.com/svgs/socials/Dribbble.svg" width="32">
-  <img alt="Linkedin" src="https://postiz.com/svgs/socials/Linkedin.svg" width="32">
-  <img alt="Reddit" src="https://postiz.com/svgs/socials/Reddit.svg" width="32">
-  <img alt="TikTok" src="https://postiz.com/svgs/socials/TikTok.svg" width="32">
-  <img alt="Facebook" src="https://postiz.com/svgs/socials/Facebook.svg" width="32">
-  <img alt="Pinterest" src="https://postiz.com/svgs/socials/Pinterest.svg" width="32">
-  <img alt="Threads" src="https://postiz.com/svgs/socials/Threads.svg" width="32">
-  <img alt="X" src="https://postiz.com/svgs/socials/X.svg" width="32">
-  <img alt="Slack" src="https://postiz.com/svgs/socials/Slack.svg" width="32">
-  <img alt="Discord" src="https://postiz.com/svgs/socials/Discord.svg" width="32">
-  <img alt="Mastodon" src="https://postiz.com/svgs/socials/Mastodon.svg" width="32">
-  <img alt="Bluesky" src="https://postiz.com/svgs/socials/Bluesky.svg" width="32">
+  <img alt="Instagram" src="https://publica.do/svgs/socials/Instagram.svg" width="32">
+  <img alt="Youtube" src="https://publica.do/svgs/socials/Youtube.svg" width="32">
+  <img alt="Dribbble" src="https://publica.do/svgs/socials/Dribbble.svg" width="32">
+  <img alt="Linkedin" src="https://publica.do/svgs/socials/Linkedin.svg" width="32">
+  <img alt="Reddit" src="https://publica.do/svgs/socials/Reddit.svg" width="32">
+  <img alt="TikTok" src="https://publica.do/svgs/socials/TikTok.svg" width="32">
+  <img alt="Facebook" src="https://publica.do/svgs/socials/Facebook.svg" width="32">
+  <img alt="Pinterest" src="https://publica.do/svgs/socials/Pinterest.svg" width="32">
+  <img alt="Threads" src="https://publica.do/svgs/socials/Threads.svg" width="32">
+  <img alt="X" src="https://publica.do/svgs/socials/X.svg" width="32">
+  <img alt="Slack" src="https://publica.do/svgs/socials/Slack.svg" width="32">
+  <img alt="Discord" src="https://publica.do/svgs/socials/Discord.svg" width="32">
+  <img alt="Mastodon" src="https://publica.do/svgs/socials/Mastodon.svg" width="32">
+  <img alt="Bluesky" src="https://publica.do/svgs/socials/Bluesky.svg" width="32">
 </div>
 
 <p align="center">
   <br />
-  <a href="https://docs.postiz.com" rel="dofollow"><strong>Explore the docs »</strong></a>
+  <a href="https://docs.publica.do" rel="dofollow"><strong>Explore the docs »</strong></a>
   <br />
 
   <br />
@@ -50,11 +50,11 @@
 </p>
 
 <p align="center">
-  <a href="https://platform.postiz.com">Register</a>
+  <a href="https://platform.publica.do">Register</a>
   ·
-  <a href="https://discord.postiz.com">Join Our Discord (devs only)</a>
+  <a href="https://discord.publica.do">Join Our Discord (devs only)</a>
   ·
-  <a href="https://docs.postiz.com/public-api">Public API</a><br />
+  <a href="https://docs.publica.do/public-api">Public API</a><br />
 </p>
 <p align="center">
   <a href="https://www.npmjs.com/package/@postiz/node">NodeJS SDK</a>
@@ -97,7 +97,7 @@
 
 ## Quick Start
 
-To have the project up and running, please follow the [Quick Start Guide](https://docs.postiz.com/quickstart)
+To have the project up and running, please follow the [Quick Start Guide](https://docs.publica.do/quickstart)
 
 ## Sponsor Postiz
 
@@ -106,7 +106,7 @@ We now give a few options to Sponsor Postiz:
 - Main Repository: Get your logo with a backlink from the main Postiz repository. Postiz has almost 3m downloads and 20k views per month.
 - Main Repository + Website: Get your logo on the central repository and the main website. Here are some metrics: - Website has 20k hits per month + 65 DR (strong backlink) - Repository has 20k hits per month + Almost 3m docker downloads.
 
-Link: https://opencollective.com/postiz
+Link: https://opencollective.com/publica
 
 ## Postiz Compliance
 
