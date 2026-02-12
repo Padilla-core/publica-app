@@ -15,6 +15,7 @@ function toQueryString(obj: Record<string, any>): string {
 export default class Publica {
   constructor(
     private _apiKey: string,
+    
     private _path = 'https://api.publica.do'
   ) {}
 
