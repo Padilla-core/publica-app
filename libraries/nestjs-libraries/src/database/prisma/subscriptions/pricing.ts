@@ -40,7 +40,7 @@ export const pricing: PricingInterface = {
   },
   STANDARD: {
     current: 'STANDARD',
-    month_price: 29,
+    month_price: 18,
     year_price: 278,
     channel: 5,
     posts_per_month: 400,
@@ -54,11 +54,11 @@ export const pricing: PricingInterface = {
     public_api: true,
     webhooks: 2,
     autoPost: false,
-    generate_videos: 3,
+    generate_videos: 0,
   },
   TEAM: {
     current: 'TEAM',
-    month_price: 39,
+    month_price: 28,
     year_price: 374,
     channel: 10,
     posts_per_month: 1000000,
@@ -72,11 +72,11 @@ export const pricing: PricingInterface = {
     public_api: true,
     webhooks: 10,
     autoPost: true,
-    generate_videos: 10,
+    generate_videos: 0,
   },
   PRO: {
     current: 'PRO',
-    month_price: 49,
+    month_price: 38,
     year_price: 470,
     channel: 30,
     posts_per_month: 1000000,
@@ -90,7 +90,7 @@ export const pricing: PricingInterface = {
     public_api: true,
     webhooks: 30,
     autoPost: true,
-    generate_videos: 30,
+    generate_videos: 0,
   },
   ULTIMATE: {
     current: 'ULTIMATE',
@@ -108,6 +108,6 @@ export const pricing: PricingInterface = {
     public_api: true,
     webhooks: 10000,
     autoPost: true,
-    generate_videos: 60,
+    generate_videos: 0,
   },
 };

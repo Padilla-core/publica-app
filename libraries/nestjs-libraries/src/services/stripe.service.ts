@@ -395,8 +395,7 @@ export class StripeService {
     const isUtm = body.utm ? `&utm_source=${body.utm}` : '';
     // @ts-ignore
     const { client_secret } = await stripeCustom.checkout.sessions.create({
-      // @ts-ignore
-      ui_mode: 'custom',
+      ui_mode: 'embedded',
       customer,
       return_url:
         process.env['FRONTEND_URL'] +
