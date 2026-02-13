@@ -372,7 +372,8 @@ export class StripeService {
     allowTrial: boolean
   ) {
     const stripeCustom = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: '2024-04-10',
+      // @ts-ignore
+      apiVersion: '2025-03-31.basil',
     });
 
     const user = await this._userService.getUserById(userId);
@@ -394,7 +395,8 @@ export class StripeService {
     const isUtm = body.utm ? `&utm_source=${body.utm}` : '';
     // @ts-ignore
     const { client_secret } = await stripeCustom.checkout.sessions.create({
-      ui_mode: 'embedded',
+      // @ts-ignore
+      ui_mode: 'custom',
       customer,
       return_url:
         process.env['FRONTEND_URL'] +
