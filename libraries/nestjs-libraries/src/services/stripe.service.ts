@@ -372,8 +372,7 @@ export class StripeService {
     allowTrial: boolean
   ) {
     const stripeCustom = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      // @ts-ignore
-      apiVersion: '2025-03-31.basil',
+      apiVersion: '2024-04-10',
     });
 
     const user = await this._userService.getUserById(userId);
