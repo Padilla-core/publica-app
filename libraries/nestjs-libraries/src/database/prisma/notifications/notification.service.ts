@@ -154,6 +154,13 @@ export class NotificationService {
     await this._emailService.sendEmail(to, subject, html, replyTo);
   }
 
+  getNotificationsPaginated(organizationId: string, page: number) {
+    return this._notificationRepository.getNotificationsPaginated(
+      organizationId,
+      page
+    );
+  }
+
   hasEmailProvider() {
     return this._emailService.hasProvider();
   }

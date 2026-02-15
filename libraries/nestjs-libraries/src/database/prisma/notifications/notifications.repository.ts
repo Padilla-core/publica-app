@@ -6,7 +6,7 @@ export class NotificationsRepository {
   constructor(
     private _notifications: PrismaRepository<'notifications'>,
     private _user: PrismaRepository<'user'>
-  ) {}
+  ) { }
 
   getLastReadNotification(userId: string) {
     return this._user.model.user.findFirst({
@@ -85,6 +85,42 @@ export class NotificationsRepository {
           content: true,
         },
       }),
+    };
+  }
+
+  async getNotificationsPaginated(organizationId: string, page: number) {
+    const limit = 100;
+    const skip = page * limit;
+
+    const where = {
+      organizationId,
+      deletedAt: null as Date | null,
+    };
+
+    const [notifications, total] = await Promise.all([
+      this._notifications.model.notifications.findMany({
+        where,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          content: true,
+          link: true,
+          createdAt: true,
+        },
+      }),
+      this._notifications.model.notifications.count({ where }),
+    ]);
+
+    return {
+      notifications,
+      total,
+      page,
+      limit,
+      hasMore: skip + notifications.length < total,
     };
   }
 }
